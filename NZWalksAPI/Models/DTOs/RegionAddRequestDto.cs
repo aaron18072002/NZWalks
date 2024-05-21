@@ -1,18 +1,16 @@
-﻿using NZWalksAPI.Models.DTOs;
+﻿using NZWalksAPI.Models.Domain;
 
-namespace NZWalksAPI.Models.Domain
+namespace NZWalksAPI.Models.DTOs
 {
-    public class Region
+    public class RegionAddRequestDto
     {
-        public Guid Id { get; set; }
         public string? Name { get; set; }
         public string? Code { get; set; }
         public string? RegionImageUrl { get; set; }
-        public RegionResponseDto ToRegionResponseDto()
+        public Region ToRegion()
         {
-            return new RegionResponseDto()
+            return new Region()
             {
-                Id = this.Id,
                 Name = this.Name,
                 Code = this.Code,
                 RegionImageUrl = this.RegionImageUrl,

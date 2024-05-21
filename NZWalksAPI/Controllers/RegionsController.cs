@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NZWalksAPI.Data;
+using NZWalksAPI.Models.DTOs;
 
 namespace NZWalksAPI.Controllers
 {
@@ -21,8 +22,13 @@ namespace NZWalksAPI.Controllers
             var regions = await this._dbContext.Regions.ToListAsync();
             if (regions.Count == 0)
             {
-                return NotFound();             
-            } 
+                return NotFound();
+            }
+            var response = new List<RegionResponseDto>();
+            foreach (var region in regions)
+            {
+                response.Add(region.ToRegionResponseDto());
+            }          
             return Ok(regions);
         }
 
@@ -31,13 +37,22 @@ namespace NZWalksAPI.Controllers
         public async Task<IActionResult> GetById
             ([FromRoute] Guid id)
         {
-            var region = await this._dbContext.Regions.FirstOrDefaultAsync
-                (r => r.Id == id);
+            var region = await this._dbContext.Regions
+                .FirstOrDefaultAsync(r => r.Id == id);
             if (region == null)
             {
                 return NotFound();
             }
+            var response = region.ToRegionResponseDto();
             return Ok(region);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Create
+            ([FromForm] RegionAddRequestDto regionAddRequest)
+        {
+
         }
     }
 }
